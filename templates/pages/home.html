@@ -8,4 +8,33 @@ This is amazing
 
 {% block content %}
 Welcome to Twitter Clone
-{% endblock %}
+{% comment %} 1:15:38 {% endcomment %}
+<div id='tweets'>
+  Replace me
+</div>
+
+<script>
+const tweetsElement = document.getElementById("tweets")
+tweetsElement.innerHTML = "Loading..."
+
+let el1 = '<h1>Hi there1</h1>'
+let el2 = '<h1>Hi there2</h1>'
+let el3 = '<h1>Hi there3</h1>'
+
+const xhr = new XMLHttpRequest()
+const method = 'GET'
+const url = '/tweets'
+const responseType = "json"
+
+
+xhr.responseType = responseType
+xhr.open(method, url)
+xhr.onload = function() {
+  console.log(xhr.response)
+  let listedItems = xhr.response.response
+  console.log(listedItems)
+}
+xhr.send()
+</script>
+
+{% endblock content%}

@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import JsonResponse
 from .models import Tweet
 
 
 # Create your views here.
-def home_view(request, *args, **kwargs):
-   return render(request, "pages/home.html", context={}, status=200)
+def home(request, *args, **kwargs):
+   return render(request, "pages/home.html", context={}, status = 200)
 
-def tweet_detail_view(request, tweet_id, *args, **kwargs):
+def tweet_detail(request, tweet_id, *args, **kwargs):
     data = {
        "id": tweet_id,
     }
@@ -15,10 +15,21 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
     status = 200
     
     try:
-      obj = Tweet.objects.get(id=tweet_id)
-      data['content'] = obj.content
+      tweet_by_id = Tweet.objects.get(id=tweet_id)
+      data['content'] = tweet_by_id.content
     except:
        data['message'] = "Not Found"
        status = 404
       
-    return JsonResponse(data, status=status)
+    return JsonResponse(data, status = status)
+
+def tweet_list(request, *args, **kwargs):
+   query_set = Tweet.objects.all()
+   tweets_list = [{"id": tweet.id, "content": tweet.content} for tweet in query_set]
+
+   data = {
+      "isUser": False,
+      "response": tweets_list
+   }
+
+   return JsonResponse(data)
