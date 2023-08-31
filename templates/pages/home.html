@@ -2,37 +2,62 @@
 
 
 {% block head_title %} 
-This is amazing
+
 {% endblock %}
 
 
 {% block content %}
-Welcome to Twitter Clone
-{% comment %} 1:15:38 {% endcomment %}
-<div id='tweets'>
-  Replace me
+<div class='row text-center'>
+  <div class="col">
+    <h1>Welcome to Twitter Clone</h1>
+  </div>
+</div>
+
+<div class='row' id='tweets'>
+  Loading...
 </div>
 
 <script>
 const tweetsElement = document.getElementById("tweets")
-tweetsElement.innerHTML = "Loading..."
 
-let el1 = '<h1>Hi there1</h1>'
-let el2 = '<h1>Hi there2</h1>'
-let el3 = '<h1>Hi there3</h1>'
 
 const xhr = new XMLHttpRequest()
 const method = 'GET'
 const url = '/tweets'
 const responseType = "json"
 
+function handleDidLike (tweet_id, currentCount) {
+  console.log(tweet_id)
+  console.log(currentCount)
+
+
+}
+
+function likeButton(tweet) {
+  return "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" + tweet.id 
+  + "," + tweet.likes + ")>" + tweet.likes + " Likes</button> "
+}
+
+function formatTweetElement(tweet) {
+  return "<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet-" + tweet.id  
+   + "'><p>" + tweet.content + 
+    "</p><div class='btn-group'>" + likeButton(tweet) +
+    "</div></div>" 
+
+}
 
 xhr.responseType = responseType
 xhr.open(method, url)
 xhr.onload = function() {
-  console.log(xhr.response)
-  let listedItems = xhr.response.response
-  console.log(listedItems)
+
+  let listedItems = xhr.response.response;
+  let finalTweetStr = "";
+
+  for (const tweet of listedItems) {
+    finalTweetStr += formatTweetElement(tweet)
+  }
+
+  tweetsElement.innerHTML = finalTweetStr
 }
 xhr.send()
 </script>
