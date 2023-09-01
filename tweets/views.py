@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Tweet
+from .forms import TweetForm
 import random
 
 
@@ -23,6 +24,17 @@ def tweet_detail(request, tweet_id, *args, **kwargs):
        status = 404
       
     return JsonResponse(data, status = status)
+
+
+def tweet_create(request, *args, **kwargs):
+   form = TweetForm(request.POST or None)
+   
+   if form.is_valid():
+      obj = form.save(commit=False)
+      obj.save()
+      form = TweetForm()
+   
+   return render(request, 'components/forms.html', context={"form": form})
 
 def tweet_list(request, *args, **kwargs):
    query_set = Tweet.objects.all()
