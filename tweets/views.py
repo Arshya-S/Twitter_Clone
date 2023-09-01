@@ -34,7 +34,7 @@ def tweet_create(request, *args, **kwargs):
       obj.save()
       form = TweetForm()
    
-   return render(request, 'components/forms.html', context={"form": form})
+   return render(request, 'components/form.html', context={"form": form})
 
 def tweet_list(request, *args, **kwargs):
    query_set = Tweet.objects.all()
