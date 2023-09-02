@@ -15,7 +15,7 @@
 
 <div class="row mb-3">
   <div class='col-md-4 mx-auto col-10'>
-    <form class='form' method='POST' action='/create-tweet'>
+    <form class='form' method='POST' id='tweet-create-form' action='/create-tweet'>
       {% csrf_token %}
       <input type='hidden' value='/' name='next' />
       <textarea class='form-control' name='content' placeholder='Your Tweet'></textarea>
@@ -28,19 +28,62 @@
 </div>
 
 <script>
-const tweetsElement = document.getElementById("tweets")
+
+function handleFormDidSubmit(event) {
+  event.preventDefault()
+  const myForm = event.target
+  const myFormData = new FormData()
+
+  const url = myForm.getAttribute('action')
+  const method = myForm.getAttribute('method')
+
+  const xhr = new XMLHttpRequest()
+  xhr.open(method, url)
+  xhr.onload = function() {
+    const serverResponse = xhr.response
+    const tweetEl = document.getElementById('tweets')
+    loadTweets(tweetEl)
+    
+  }
+  xhr.send(myFormData)
+}
+
+const tweetCreateFormEl = document.getElementById('tweet-create-form')
+
+tweetCreateFormEl.addEventListener('submit', handleFormDidSubmit)
 
 
-const xhr = new XMLHttpRequest()
-const method = 'GET'
-const url = '/tweets'
-const responseType = "json"
+const tweetsEl = document.getElementById("tweets")
+
+function loadTweets(tweetsElement) {
+  const xhr = new XMLHttpRequest()
+  const method = 'GET'
+  const url = '/tweets'
+  const responseType = "json"
+
+  xhr.responseType = responseType
+  xhr.open(method, url)
+  xhr.onload = function() {
+
+    let listedItems = xhr.response.response;
+    let finalTweetStr = "";
+
+    for (const tweet of listedItems) {
+      finalTweetStr += formatTweetElement(tweet)
+    }
+
+    tweetsElement.innerHTML = finalTweetStr
+  }
+  xhr.send()
+
+}
+
+loadTweets(tweetsEl)
+
 
 function handleDidLike (tweet_id, currentCount) {
   console.log(tweet_id)
   console.log(currentCount)
-
-
 }
 
 function likeButton(tweet) {
@@ -53,23 +96,9 @@ function formatTweetElement(tweet) {
    + "'><p>" + tweet.content + 
     "</p><div class='btn-group'>" + likeButton(tweet) +
     "</div></div>" 
-
 }
 
-xhr.responseType = responseType
-xhr.open(method, url)
-xhr.onload = function() {
 
-  let listedItems = xhr.response.response;
-  let finalTweetStr = "";
-
-  for (const tweet of listedItems) {
-    finalTweetStr += formatTweetElement(tweet)
-  }
-
-  tweetsElement.innerHTML = finalTweetStr
-}
-xhr.send()
 </script>
 
 {% endblock content%}
