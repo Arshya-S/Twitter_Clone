@@ -47,6 +47,11 @@ function handleFormDidSubmit(event) {
         const originalHTML = tweetsContainerElement.innerHTML
         tweetsContainerElement.innerHTML = newTweetElement + originalHTML
         myForm.reset()
+      } else if (xhr.status === 400) {
+        const errorJson = xhr.response
+        console.log(errorJson)
+      } else if (xhr.status === 500) {
+        alert('Server error')
       }
     }
     xhr.send(myFormData)
