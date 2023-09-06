@@ -48,7 +48,7 @@ def tweet_create(request, *args, **kwargs):
 
 def tweet_list(request, *args, **kwargs):
    query_set = Tweet.objects.all()
-   tweets_list = [{"id": tweet.id, "content": tweet.content, 'likes': random.randint(0,10000)} for tweet in query_set]
+   tweets_list = [tweet.serialize() for tweet in query_set]
 
    data = {
       "isUser": False,
