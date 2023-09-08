@@ -80,6 +80,9 @@ function handleFormDidSubmit(event) {
 
       } else if (xhr.status === 500) {
         alert('Server error')
+      } else if (xhr.status === 401) {
+        alert('Must be logged in')
+        window.location.href = '/login'
       }
     }
     xhr.send(myFormData)
