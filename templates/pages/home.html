@@ -83,7 +83,11 @@ function handleFormDidSubmit(event) {
       } else if (xhr.status === 401) {
         alert('Must be logged in')
         window.location.href = '/login'
-      }
+      } else if (xhr.status === 403) {
+        alert('Must be logged in!')
+        window.location.href = '/login'
+      } 
+      
     }
     xhr.send(myFormData)
 }
