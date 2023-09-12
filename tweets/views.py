@@ -35,7 +35,9 @@ def tweet_create(request, *args, **kwargs):
    serializer = TweetSerializer(data=request.POST or None)
 
    if serializer.is_valid():
-      serializer.save()
+      obj = serializer.save(user=request.user)
+      return JsonResponse(serializer.data, status=201)
+
       
    return JsonResponse({}, status=400)
 
