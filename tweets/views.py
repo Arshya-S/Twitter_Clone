@@ -28,6 +28,7 @@ def tweet_create(request, *args, **kwargs):
 
 # GET endpoint for getting all tweets.
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def tweet_list(request, *args, **kwargs):
    query_set = Tweet.objects.all()
    serializer = TweetSerializer(query_set, many=True)
@@ -37,6 +38,7 @@ def tweet_list(request, *args, **kwargs):
 
 # GET endpoint for getting tweet by id.
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def tweet_detail(request, tweet_id, *args, **kwargs):
    query_set = Tweet.objects.filter(id=tweet_id)
    
@@ -47,5 +49,24 @@ def tweet_detail(request, tweet_id, *args, **kwargs):
    serializer = TweetSerializer(obj)
 
    return Response(serializer.data, status=200)
+
+# DELETE endpoint for deleting tweet by id.
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def tweet_delete(request, tweet_id, *args, **kwargs):
+   
+   query_set = Tweet.objects.filter(id=tweet_id)
+   if not query_set.exists():
+      return Response({}, status=404)
+   
+   query_set = query_set.filter(user=request.user)
+   if not query_set.exists():
+      return Response({'message': 'You do not have permission to delete this tweet.'}, status=401)
+  
+   obj = query_set.first()
+   obj.delete()
+
+   return Response({'message': 'Tweet successfully deleted'}, status=200)
+
 
 
