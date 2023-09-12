@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
-
 from .models import Tweet
 from .forms import TweetForm
+from .serializers import TweetSerializer
 import random
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -32,6 +32,15 @@ def tweet_detail(request, tweet_id, *args, **kwargs):
 
 
 def tweet_create(request, *args, **kwargs):
+   serializer = TweetSerializer(data=request.POST or None)
+
+   if serializer.is_valid():
+      serializer.save()
+      
+   return JsonResponse({}, status=400)
+
+
+def tweet_create_pure_django(request, *args, **kwargs):
    user = request.user
    
    if not request.user.is_authenticated:
