@@ -50,7 +50,7 @@ def tweet_detail(request, tweet_id, *args, **kwargs):
 
    return Response(serializer.data, status=200)
 
-# DELETE endpoint for deleting tweet by id.
+# DELETE/POST endpoint for deleting tweet by id.
 @api_view(['DELETE', 'POST'])
 @permission_classes([IsAuthenticated])
 def tweet_delete(request, tweet_id, *args, **kwargs):
@@ -65,6 +65,24 @@ def tweet_delete(request, tweet_id, *args, **kwargs):
   
    obj = query_set.first()
    obj.delete()
+
+   return Response({'message': 'Tweet successfully deleted'}, status=200)
+
+# POST endpoint for liking tweets.
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tweet_like(request, tweet_id, *args, **kwargs):
+
+   query_set = Tweet.objects.filter(id=tweet_id)
+   if not query_set.exists():
+      return Response({}, status=404)
+
+   obj = query_set.first()
+
+   if request.user in obj.likes.all():
+      obj.likes.remove(request.user)
+   else:
+      obj.likes.add(request.user)
 
    return Response({'message': 'Tweet successfully deleted'}, status=200)
 
