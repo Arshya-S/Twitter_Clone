@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from .models import Tweet
-from .serializers import TweetSerializer
+from .serializers import TweetSerializer, TweetActionSerializer
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -69,9 +69,16 @@ def tweet_delete(request, tweet_id, *args, **kwargs):
    return Response({'message': 'Tweet successfully deleted'}, status=200)
 
 # POST endpoint for liking tweets.
+# Actions include: liking, unliking, retweeting
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def tweet_like(request, tweet_id, *args, **kwargs):
+def tweet_action(request, *args, **kwargs):
+
+   serializer = TweetActionSerializer(request.POST)
+   if serializer.is_valid(raise_exception=True):
+      data = serializer.validated_data
+      tweet_id = data.get('id')
+      action = data.get('action')
 
    query_set = Tweet.objects.filter(id=tweet_id)
    if not query_set.exists():
@@ -79,10 +86,12 @@ def tweet_like(request, tweet_id, *args, **kwargs):
 
    obj = query_set.first()
 
-   if request.user in obj.likes.all():
-      obj.likes.remove(request.user)
-   else:
+   if action == 'like':
       obj.likes.add(request.user)
+   elif action == 'unlike':
+      obj.likes.remove(request.user)
+   elif action == 'retweet':
+      pass
 
    return Response({'message': 'Tweet successfully deleted'}, status=200)
 
