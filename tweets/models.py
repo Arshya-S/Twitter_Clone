@@ -22,11 +22,6 @@ class Tweet(models.Model):
     class Meta:
         ordering = ['-id']
 
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "content": self.content,
-            "likes": random.randint(0,1000)
-        }
-    
+    @property
+    def is_retweet(self):
+        return self.parent != None
