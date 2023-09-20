@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
+import Tweet from './components/Tweet'
 
-interface Tweet {
+
+interface TweetInterface {
   id: number,
   content: string,
   likes: number,
@@ -12,7 +14,7 @@ interface Tweet {
 
 
 function App() {
-  const [tweets, setTweets] = useState<Tweet[]>([]);
+  const [tweets, setTweets] = useState<TweetInterface[]>([]);
 
   
   useEffect(() => {
@@ -27,7 +29,7 @@ function App() {
           throw new Error('Response not ok')
         }
 
-        const data: Tweet[] = await response.json();
+        const data: TweetInterface[] = await response.json();
         setTweets(data)
 
       } catch (err) {
@@ -36,18 +38,14 @@ function App() {
     }
 
     getTweets();
-
-    
-
   }, [])
 
 
 
   return (
     <>
-      {tweets.map(tweet => {
-        console.log(tweet)
-        return <li key={tweet.id}>{tweet.content}</li>
+      {tweets.map((tweet, index) => {
+        return <Tweet key={index} content={tweet.content} />
       })}
     </>
   )
