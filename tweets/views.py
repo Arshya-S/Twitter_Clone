@@ -28,7 +28,7 @@ def tweet_create(request, *args, **kwargs):
 
 # GET endpoint for getting all tweets.
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def tweet_list(request, *args, **kwargs):
    query_set = Tweet.objects.all()
    serializer = TweetSerializer(query_set, many=True)
