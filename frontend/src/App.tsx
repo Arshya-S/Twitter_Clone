@@ -42,7 +42,7 @@ function App() {
 
 
   return (
-    <div>
+    <div className='container'>
       {tweets.map((tweet, index) => {
         return <Tweet key={index} tweet={tweet}/>
       })}
