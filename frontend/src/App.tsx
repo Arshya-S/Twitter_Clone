@@ -3,8 +3,7 @@ import './App.css'
 
 import Tweet from './components/Tweet'
 
-
-interface TweetInterface {
+export interface TweetType {
   id: number,
   content: string,
   likes: number,
@@ -12,9 +11,8 @@ interface TweetInterface {
   parent: object
 }
 
-
 function App() {
-  const [tweets, setTweets] = useState<TweetInterface[]>([]);
+  const [tweets, setTweets] = useState<TweetType[]>([]);
 
   
   useEffect(() => {
@@ -29,7 +27,7 @@ function App() {
           throw new Error('Response not ok')
         }
 
-        const data: TweetInterface[] = await response.json();
+        const data: TweetType[] = await response.json();
         setTweets(data)
 
       } catch (err) {
@@ -43,11 +41,11 @@ function App() {
 
 
   return (
-    <>
+    <div>
       {tweets.map((tweet, index) => {
-        return <Tweet key={index} content={tweet.content} />
+        return <Tweet key={index} tweet={tweet}/>
       })}
-    </>
+    </div>
   )
 }
 
