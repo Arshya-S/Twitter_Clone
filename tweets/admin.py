@@ -1,9 +1,9 @@
 from django.contrib import admin
-
-# Register your models here.
-
 from .models import Tweet, TweetLike
 
+# ADMIN CREDENTIALS:
+# Username: arshya
+# Password: 1234
 
 class TweetLikeAdmin(admin.TabularInline):
   model = TweetLike
