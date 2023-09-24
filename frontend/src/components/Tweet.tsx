@@ -10,6 +10,7 @@ const Tweet: React.FC<{ tweet: TweetType}> = ({tweet}) => {
   const colorFilled: string = 'btn-primary'
   const colorEmpty: string = 'btn-outline-primary'
   const color: string = liked ? colorFilled : colorEmpty
+  
   return(
     <div className="col-7 mx-auto p-3 mt-4 border border-2">
       <p className='ms-2 fw-normal'>{tweet.content}</p>

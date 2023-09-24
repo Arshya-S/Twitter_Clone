@@ -1,15 +1,19 @@
 import './App.css'
 import './index.css'
 
-import TweetList from './components/TweetsList'
 
+import TweetList from './components/TweetsList'
+import CreateTweet from './components/CreateTweet'
 
 
 
 
 function App() {
   return (
-    <TweetList />
+    <div>
+      <CreateTweet />
+      <TweetList />
+    </div>
   )
 }
 
