@@ -15,7 +15,7 @@ def home(request, *args, **kwargs):
 
 # POST endpoint for creating tweets.
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def tweet_create(request, *args, **kwargs):
    serializer = TweetCreateSerializer(data=request.POST)
 

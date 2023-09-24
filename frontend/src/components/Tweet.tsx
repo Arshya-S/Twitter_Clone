@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { TweetType } from "./TweetsList"
+import { TweetType } from "../App"
 
 
 const Tweet: React.FC<{ tweet: TweetType}> = ({tweet}) => {

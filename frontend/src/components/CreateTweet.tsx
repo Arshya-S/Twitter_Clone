@@ -7,11 +7,35 @@ const CreateTweet = () => {
     setText(event.target.value)
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    console.log(text)
-    setText('')
+    
+    const tweetData: object = {
+      content: text,
+      likes: 0,
+      is_retweet: false,
+      parent: null
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/tweets/create/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(tweetData)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Response not ok')
+      }
+
+      setText('')
+
+    } catch (err) {
+      console.log('Post tweets error: ', err)
+    }
+
   };
+
 
   return (
     <form
