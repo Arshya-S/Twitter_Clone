@@ -6,7 +6,7 @@ export interface TweetType {
   content: string,
   likes: number,
   is_retweet: boolean,
-  parent: object
+  parent: object | null
 }
 
 const TweetList = () => {

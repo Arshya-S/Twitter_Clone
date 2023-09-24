@@ -1,12 +1,7 @@
-import { TweetType } from '../App'
+import { TweetType } from "./TweetsList"
 
 
-interface TweetProps {
-  tweet: TweetType
-}
-
-const Tweet = ({tweet}: TweetProps) => {
-//  col-10 mx-auto col-md-6 my-5 py-5 border bg-white text-dark
+const Tweet: React.FC<{ tweet: TweetType}> = ({tweet}) => {
   return(
     <div className="col-7 mx-auto p-3 mt-4 border border-2">
       <p className='ms-2 fw-normal'>{tweet.content}</p>
