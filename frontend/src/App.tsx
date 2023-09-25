@@ -14,14 +14,12 @@ export interface TweetType {
   parent: object | null
 }
 
-
-
 function App() {
   
   const [tweets, setTweets] = useState<TweetType[]>([]);
+  const [reRender, setReRender] = useState<number>(0)
 
   useEffect(() => {
-    
     const getTweets = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/tweets', {
@@ -41,11 +39,11 @@ function App() {
     }
 
     getTweets();
-  }, [])
+  }, [reRender])
 
   return (
     <div>
-      <CreateTweet />
+      <CreateTweet reRender={reRender} setReRender={setReRender}/>
       <TweetList tweets={tweets}/>
     </div>
   )

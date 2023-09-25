@@ -1,6 +1,11 @@
 import { useState } from "react"
 
-const CreateTweet = () => {
+interface CreateTweetProps {
+  setReRender: (value: number) => void;
+  reRender: number
+}
+
+const CreateTweet: React.FC<CreateTweetProps> = ({ setReRender, reRender}) => {
   const [text, setText] = useState<string>('')
 
   const handleTextareaChange = (event:  React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -11,10 +16,7 @@ const CreateTweet = () => {
     event.preventDefault()
     
     const tweetData: object = {
-      content: text,
-      likes: 0,
-      is_retweet: false,
-      parent: null
+      content: text
     }
 
     try {
@@ -29,6 +31,12 @@ const CreateTweet = () => {
       }
 
       setText('')
+
+      if (reRender === 1) {
+        setReRender(0)
+      } else {
+        setReRender(1)
+      }
 
     } catch (err) {
       console.log('Post tweets error: ', err)
