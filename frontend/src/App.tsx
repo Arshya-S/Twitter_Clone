@@ -27,7 +27,7 @@ function App() {
   return (
     <div>
       <CreateTweet reRender={reRender} setReRender={setReRender}/>
-      <TweetList tweets={tweets}/>
+      <TweetList tweets={tweets} reRender={reRender} setReRender={setReRender}/>
     </div>
   )
 }

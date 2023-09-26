@@ -19,9 +19,7 @@ const CreateTweet: React.FC<CreateTweetProps> = ({ setReRender, reRender}) => {
     const tweetData: object = {
       content: text
     }
-
-   postTweet(tweetData, setText, setReRender, reRender)
-
+    postTweet(tweetData, setText, setReRender, reRender)
   };
 
 
