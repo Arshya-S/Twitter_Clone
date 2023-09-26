@@ -5,6 +5,7 @@ import TweetList from './components/TweetsList'
 import CreateTweet from './components/CreateTweet'
 import { useState, useEffect } from 'react'
 
+import getTweets from './helper/get_tweets'
 
 export interface TweetType {
   id: number,
@@ -20,25 +21,7 @@ function App() {
   const [reRender, setReRender] = useState<number>(0)
 
   useEffect(() => {
-    const getTweets = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/api/tweets', {
-          method: 'GET'
-        })
-
-        if (!response.ok) {
-          throw new Error('Response not ok')
-        }
-
-        const data: TweetType[] = await response.json();
-        setTweets(data)
-
-      } catch (err) {
-        console.log('Fetch tweets error: ', err)
-      }
-    }
-
-    getTweets();
+    getTweets(setTweets);
   }, [reRender])
 
   return (

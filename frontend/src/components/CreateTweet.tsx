@@ -1,4 +1,5 @@
 import { useState } from "react"
+import postTweet from "../helper/post_tweet";
 
 interface CreateTweetProps {
   setReRender: (value: number) => void;
@@ -19,35 +20,14 @@ const CreateTweet: React.FC<CreateTweetProps> = ({ setReRender, reRender}) => {
       content: text
     }
 
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/tweets/create/', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(tweetData)
-      })
-      
-      if (!response.ok) {
-        throw new Error('Response not ok')
-      }
-
-      setText('')
-
-      if (reRender === 1) {
-        setReRender(0)
-      } else {
-        setReRender(1)
-      }
-
-    } catch (err) {
-      console.log('Post tweets error: ', err)
-    }
+   postTweet(tweetData, setText, setReRender, reRender)
 
   };
 
 
   return (
     <form
-      className="col-7 mx-auto d-flex flex-column align-items-end mt-5"
+      className="col-5 mx-auto d-flex flex-column align-items-end mt-5"
       onSubmit={handleSubmit}
     >
       <textarea
