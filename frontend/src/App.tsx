@@ -1,8 +1,6 @@
 import './App.css'
 import './index.css'
 
-import TweetList from './components/TweetsList'
-import CreateTweet from './components/CreateTweet'
 import Navbar from './components/Navbar'
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'

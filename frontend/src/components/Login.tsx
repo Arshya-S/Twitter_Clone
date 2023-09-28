@@ -1,13 +1,43 @@
 import React, { useState } from 'react';
 
+
+
 const Login = () => {
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const user: object = {
+      username: username,
+      password: password
+    }
+
+    try {
+      const response = await fetch('http://localhost:8000/token/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(user)
+    })
+
+    if (!response.ok) {
+      throw new Error('Response not ok')
+    }
+
+    localStorage.clear();
+    localStorage.setItem('access_token', response.access);
+    localStorage.setItem('refresh_token', response.refresh);
+    window.location.href = '/'
+  
+
+    } catch (err) {
+      console.log('Login error: ', err)
+    }
+
+  
   };
 
   return (
@@ -17,13 +47,13 @@ const Login = () => {
           <h2 className='mb-5'>Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email:</label>
+              <label htmlFor="email" className="form-label">Username:</label>
               <input
-                type="email"
+                type="username"
                 className="form-control"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>

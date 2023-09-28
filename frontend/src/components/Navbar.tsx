@@ -11,7 +11,6 @@ const Navbar = () => {
     }
   }, [isAuth]);
 
-
   return (
     <nav className="navbar bg-dark" data-bs-theme="dark">
       <div className="container-fluid d-flex justify-content-between">
