@@ -3,9 +3,14 @@ import './index.css'
 
 import TweetList from './components/TweetsList'
 import CreateTweet from './components/CreateTweet'
+import Navbar from './components/Navbar'
 import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 
 import getTweets from './helper/get_tweets'
+import Login from './components/Login'
+import Home from './components/Home'
 
 export interface TweetType {
   id: number,
@@ -20,16 +25,24 @@ function App() {
   const [tweets, setTweets] = useState<TweetType[]>([]);
   const [reRender, setReRender] = useState<number>(0)
 
+  
+
   useEffect(() => {
     getTweets(setTweets);
   }, [reRender])
 
+  
   return (
-    <div>
-      <CreateTweet reRender={reRender} setReRender={setReRender}/>
-      <TweetList tweets={tweets} reRender={reRender} setReRender={setReRender}/>
-    </div>
+    <BrowserRouter>
+      <Navbar/>
+      <Routes>
+        <Route path='/' element={<Home setReRender={setReRender} reRender={reRender} tweets={tweets}/>}/>
+        <Route path='/login' element={<Login />}/>
+      </Routes>
+    </BrowserRouter>
+    
   )
+  
 }
 
 export default App

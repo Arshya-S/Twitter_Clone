@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from rest_framework_simplejwt import views as jwt_views
 from django.urls import path, include
 from tweets.views import (
   home, 
@@ -22,7 +23,8 @@ from tweets.views import (
   tweet_list,
   tweet_create,
   tweet_delete,
-  tweet_action
+  tweet_action,
+  logout_view,
 )
 
 urlpatterns = [
@@ -32,4 +34,7 @@ urlpatterns = [
     path('tweets', tweet_list),
     path('tweets/<int:tweet_id>', tweet_detail),
     path('api/tweets/', include('tweets.urls')),
+    path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
+    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
+    path('logout/', logout_view, name ='logout')
 ]

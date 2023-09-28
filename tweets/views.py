@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from .models import Tweet
 from .serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -98,6 +99,18 @@ def tweet_action(request, *args, **kwargs):
       return Response(serializer.data, status=200)
 
    return Response({}, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_view(request, *args, **kwargs):
+   try:
+      refresh_token = request.data["refresh_token"]
+      token = RefreshToken(refresh_token)
+      token.blacklist()
+      return Response(status=205)
+   except Exception as e:
+      return Response(status=400)
 
 
 
