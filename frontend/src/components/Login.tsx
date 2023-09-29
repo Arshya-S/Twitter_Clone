@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
+interface Response {
+  username: string
+}
 
-const Login: React.FC<{ setAuthTokens: (token: string) => void, setUser: (user: string) => void }> = ({ setAuthTokens, setUser }) => {
 
+const Login: React.FC<{ setUser: (user: string) => void }> = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    
     const user: object = {
       username: username,
       password: password
@@ -29,20 +30,19 @@ const Login: React.FC<{ setAuthTokens: (token: string) => void, setUser: (user: 
     const data = await response.json()
     
     if (response.status === 200) {
-      setAuthTokens(data)
-      const responseObject: object  = jwt_decode(data.access)
-      setUser(responseObject.username)
       localStorage.setItem('authTokens', JSON.stringify(data))
-      navigate('/')
+
+
+      const responseData: Response = jwt_decode(data.access)
+      localStorage.setItem('username', responseData.username)
+      setUser(responseData.username)
+
+      navigate('/tweets')
     }
 
-    
-  
     } catch (err) {
       console.log('Login error: ', err)
     }
-
-  
   };
 
   return (
