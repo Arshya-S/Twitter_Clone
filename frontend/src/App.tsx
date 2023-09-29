@@ -1,14 +1,15 @@
 import './App.css'
 import './index.css'
 
-import Navbar from './components/Navbar'
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 
 import getTweets from './helper/get_tweets'
+
 import Login from './components/Login'
 import Home from './components/Home'
+import Navbar from './components/Navbar'
 
 export interface TweetType {
   id: number,
@@ -20,8 +21,11 @@ export interface TweetType {
 
 function App() {
   
-  const [tweets, setTweets] = useState<TweetType[]>([]);
+  const [tweets, setTweets] = useState<TweetType[]>([])
   const [reRender, setReRender] = useState<number>(0)
+  const [authTokens, setAuthTokens] = useState<string>('')
+  const [user, setUser] = useState<string>('')
+  
 
   
 
@@ -32,10 +36,10 @@ function App() {
   
   return (
     <BrowserRouter>
-      <Navbar/>
+      <Navbar user={user}/>
       <Routes>
         <Route path='/' element={<Home setReRender={setReRender} reRender={reRender} tweets={tweets}/>}/>
-        <Route path='/login' element={<Login />}/>
+        <Route path='/login' element={<Login setAuthTokens={setAuthTokens} setUser={setUser}/>}/>
       </Routes>
     </BrowserRouter>
     

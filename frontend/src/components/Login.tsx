@@ -1,38 +1,43 @@
 import React, { useState } from 'react';
+import jwt_decode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 
-
-const Login = () => {
+const Login: React.FC<{ setAuthTokens: (token: string) => void, setUser: (user: string) => void }> = ({ setAuthTokens, setUser }) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate()
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    
     const user: object = {
       username: username,
       password: password
     }
 
     try {
-      const response = await fetch('http://localhost:8000/token/', {
+      const response = await fetch('http://localhost:8000/api/token/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(user)
     })
 
-    if (!response.ok) {
-      throw new Error('Response not ok')
+    const data = await response.json()
+    
+    if (response.status === 200) {
+      setAuthTokens(data)
+      const responseObject: object  = jwt_decode(data.access)
+      setUser(responseObject.username)
+      localStorage.setItem('authTokens', JSON.stringify(data))
+      navigate('/')
     }
 
-    localStorage.clear();
-    localStorage.setItem('access_token', response.access);
-    localStorage.setItem('refresh_token', response.refresh);
-    window.location.href = '/'
+    
   
-
     } catch (err) {
       console.log('Login error: ', err)
     }

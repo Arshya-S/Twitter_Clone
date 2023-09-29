@@ -1,15 +1,4 @@
-import { useState, useEffect } from "react";
-
-
-const Navbar = () => {
-
-  const [isAuth, setIsAuth] = useState(false);
-   
-  useEffect(() => {
-    if (localStorage.getItem('access_token') !== null) {
-      setIsAuth(true); 
-    }
-  }, [isAuth]);
+const Navbar: React.FC<{ user: string }> = ({ user }) => {
 
   return (
     <nav className="navbar bg-dark" data-bs-theme="dark">
@@ -20,18 +9,23 @@ const Navbar = () => {
           </a>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">Tweets</a>
+              <a className="nav-link active" aria-current="page" href="/">Tweets</a>
             </li>
           </ul>
         </div>
         <div>
         <ul className="navbar-nav">
+            {/* {user && <li className="nav-item text-light d-flex flex-row"> Hello {user}</li>} */}
             <li className="nav-item">
-              {isAuth 
-              ? 
-              <a className="nav-link active" aria-current="page" href="#">Logout</a> 
-              : 
-              <a className="nav-link active" aria-current="page" href="/login">Login</a>}
+              {user ? (
+                <div className="d-flex align-items-center">
+                  <p className="text-light me-4">Hello {user}</p>
+                  <a className="nav-link active" aria-current="page" href="#">Logout</a> 
+                </div>
+                
+              ):(
+                <a className="nav-link active" aria-current="page" href="/login">Login</a>
+              )}
             </li>
           </ul>
         </div>

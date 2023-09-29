@@ -6,12 +6,22 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from .models import Tweet
 from .serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
-def home(request, *args, **kwargs):
-   return render(request, "pages/home.html", context={}, status = 200)
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+
+        return token
+    
+class MyTokenObtainPairView(TokenObtainPairView):
+   serializer_class = MyTokenObtainPairSerializer
 
 
 # POST endpoint for creating tweets.
